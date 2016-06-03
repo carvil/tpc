@@ -5,7 +5,8 @@
                  [compojure "1.1.6"]
                  [hiccup "1.0.5"]
                  [ring-server "0.3.1"]
-                 [pdfboxing "0.1.9"]]
+                 [org.apache.pdfbox/pdfbox "1.8.10"]
+                 [technology.tabula/tabula "0.9.0"]]
   :plugins [[lein-ring "0.8.12"]]
   :ring {:handler tpc.handler/app
          :init tpc.handler/init

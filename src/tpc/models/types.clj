@@ -1,6 +1,5 @@
 (ns tpc.models.types)
 
-
 (defn to-money [string]
   (cond
     (empty? string) 0.0

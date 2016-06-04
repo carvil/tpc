@@ -10,24 +10,36 @@
     (.extract)
     (.next)))
 
+(defn tpc-comission? [cell]
+  (= (.getText cell) "TPC COMISSION"))
+
+(defn row-with-headers? [cells]
+  (some tpc-comission? cells))
+
+(defn table-with-entries? [table]
+  (some row-with-headers? (.getRows table)))
+
+(defn find-table [tables]
+  (first (filter table-with-entries? tables)))
+
 (defn find-rows [file-path]
   "Given a page of a PDF file, finds the last table, removes the header and
    returns the rows."
   (->
     (.extract (technology.tabula.extractors.SpreadsheetExtractionAlgorithm.)
               (find-page file-path))
-    (.get 1)
+    (find-table)
     (.getRows)
     (reverse)
     (drop-last)))
 
-(defn rows->entries [rows]
-  "Converts a list of Rows into TPCEntry records."
-  (map #(Row->TPCEntry %) rows))
-
 (defn Row->TPCEntry [row]
   "Converts a single row into TPCEntry record."
   (apply types/->TPCEntry (map #(.getText %) row)))
+
+(defn rows->entries [rows]
+  "Converts a list of Rows into TPCEntry records."
+  (map #(Row->TPCEntry %) rows))
 
 (defn tpc-cost [rows]
   "Calculates the aggregate cost for TPC"

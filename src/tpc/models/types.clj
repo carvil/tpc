@@ -1,13 +1,17 @@
 (ns tpc.models.types)
 
+(defn normalise [string]
+  (->
+    string
+    (.replace " €" "")
+    (.replace "," ".")
+    (.replace "-" "")))
+
 (defn to-money [string]
-  (cond
-    (empty? string) 0.0
-    :else (->
-            string
-            (.replace " €" "")
-            (.replace "," ".")
-            (Float.))))
+  (let [normalised-string (normalise string)]
+    (cond
+      (empty? normalised-string) 0.0
+      :else (Float. normalised-string))))
 
 (defprotocol Entry
   "A protocol defining the functions allowed on a given entry (i.e. a booking)"

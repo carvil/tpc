@@ -61,5 +61,8 @@
   (testing "total-cost"
     (is (= (total-cost expenses-entry) 20.0)))
   (testing "net-profit"
-    (is (= (net-profit expenses-entry) -20.0)))
-         )
+    (is (= (net-profit expenses-entry) -20.0))))
+
+(deftest to-money-test
+  (testing "with a string that isn't a number"
+    (is (= (to-money "-") 0.0))))

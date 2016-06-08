@@ -22,6 +22,27 @@
 (defn find-table [tables]
   (first (filter table-with-entries? tables)))
 
+(defn merge-headers [raw-rows]
+  "Takes a list of header and rows, and creates a list of maps mapping the
+  headers with the rows"
+  (map #(zipmap (first raw-rows) %) (rest raw-rows)))
+
+(defn stringify-cells [cells]
+  "Given a list of Cells, it extracts the text out of them."
+  (map #(.getText %) cells))
+
+(defn stringify-list [lst]
+  "Converts rows of cells into strings."
+  (map stringify-cells lst))
+
+(defn valid-row? [row]
+  "A row is valid if there is at least some info on it."
+  (some #(not (empty? %)) row))
+
+(defn delete-empty-rows [rows]
+  "Some rows are empty, so this function filters them out."
+  (filter valid-row? rows))
+
 (defn find-rows [file-path]
   "Given a page of a PDF file, finds the last table, removes the header and
    returns the rows."
@@ -30,12 +51,20 @@
               (find-page file-path))
     (find-table)
     (.getRows)
-    (reverse)
-    (drop-last)))
+    (stringify-list)
+    (delete-empty-rows)
+    (merge-headers)))
 
 (defn Row->TPCEntry [row]
   "Converts a single row into TPCEntry record."
-  (apply types/->TPCEntry (map #(.getText %) row)))
+  (types/->TPCEntry (get row "DATE IN")
+                    (get row "DATE OUT")
+                    (get row "NIGHTS")
+                    (get row "PROPERTY")
+                    (get row "PLATFORM")
+                    (get row "VALUE")
+                    (get row "CHANNEL %")
+                    (get row "TPC COMISSION")))
 
 (defn rows->entries [rows]
   "Converts a list of Rows into TPCEntry records."

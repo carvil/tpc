@@ -4,7 +4,10 @@ body {
     font-size: 13px;
 }
 
-h1 {
+h1, h2 {
     text-align: center;
 }
 
+form input[type=submit] {
+  float: right;
+}

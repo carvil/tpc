@@ -7,13 +7,18 @@
 
 (defn home [& [message]]
   (layout/common
-    [:h1 "TPC"]
-    [:p "Import the TPC bill here"]
-    [:hr]
-    (form-to {:enctype "multipart/form-data"}
+    [:div {:class "container"}
+       [:div {:class "columns"}
+         [:div {:class "column col-4"} ""]
+         [:div {:class "column col-4"}
+           [:h2 "The Porto Concierge"]
+           [:hr]
+           (form-to {:enctype "multipart/form-data"}
              [:post "/"]
              (file-upload :file)
-             (submit-button "Upload"))
+             (submit-button "Upload"))]
+         [:div {:class "column col-4"} ""]
+        ]]
     [:p message]))
 
 (defn temp-file-path [params]

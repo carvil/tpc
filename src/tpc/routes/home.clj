@@ -16,7 +16,7 @@
            (form-to {:enctype "multipart/form-data"}
              [:post "/"]
              (file-upload :file)
-             (submit-button "Upload"))]
+             [:input {:type "submit" :text "Upload" :class "btn btn-primary"}])]
          [:div {:class "column col-4"} ""]
         ]]
     [:p message]))

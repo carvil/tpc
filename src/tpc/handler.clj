@@ -1,4 +1,5 @@
 (ns tpc.handler
+  (:use [ring.adapter.jetty])
   (:require [compojure.core :refer [defroutes routes]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.file-info :refer [wrap-file-info]]
@@ -21,3 +22,7 @@
   (-> (routes home-routes app-routes)
       (handler/site)
       (wrap-base-url)))
+
+(defn -main []
+  (let [port (Integer/parseInt (get (System/getenv) "PORT" "8080"))]
+    (run-jetty app {:port port})))

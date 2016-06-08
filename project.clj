@@ -11,6 +11,7 @@
   :ring {:handler tpc.handler/app
          :init tpc.handler/init
          :destroy tpc.handler/destroy}
+  :min-lein-version "2.6.1"
   :profiles
   {:uberjar {:aot :all}
    :production

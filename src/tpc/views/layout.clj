@@ -5,5 +5,6 @@
   (html5
     [:head
      [:title "Welcome to tpc"]
-     (include-css "/css/screen.css")]
+     (include-css "/css/screen.css")
+     (include-css "/css/spectre.css")]
     [:body body]))

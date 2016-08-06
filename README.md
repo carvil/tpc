@@ -23,4 +23,4 @@ To run the tests, run:
 
 ## License
 
-Copyright © 2016 FIXME
+Copyright © 2016 Carlos Vilhena

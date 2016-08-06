@@ -11,7 +11,9 @@
     (.next)))
 
 (defn tpc-comission? [cell]
-  (= (.getText cell) "TPC COMISSION"))
+  (and
+    (.contains (.getText cell) "COMISSION")
+    (.contains (.getText cell) "TPC")))
 
 (defn row-with-headers? [cells]
   (some tpc-comission? cells))
@@ -55,6 +57,8 @@
     (delete-empty-rows)
     (merge-headers)))
 
+(def select-values (comp vals select-keys))
+
 (defn Row->TPCEntry [row]
   "Converts a single row into TPCEntry record."
   (types/->TPCEntry (get row "DATE IN")
@@ -64,7 +68,7 @@
                     (get row "PLATFORM")
                     (get row "VALUE")
                     (get row "CHANNEL %")
-                    (get row "TPC COMISSION")))
+                    (first (select-values row ["TPC COMISSION" "TPC\rCOMISSION"]))))
 
 (defn rows->entries [rows]
   "Converts a list of Rows into TPCEntry records."

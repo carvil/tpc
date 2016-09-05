@@ -5,7 +5,21 @@
             [tpc.api :as api]))
 
 
-(defn home [& [message]]
+(defn amount-to-list [kv]
+  (vector [:dt (first kv)] [:dd (second kv)]))
+
+
+(defn amounts-to-list [amounts]
+  (map amounts-to-list amounts))
+
+
+(defn display-amounts [amounts]
+  (if (empty? amounts)
+    [:p "Upload a bill"]
+    (apply concat (map #(vector [:dt (first %)] [:dd (second %)]) amounts))))
+
+
+(defn home [& [amounts]]
   (layout/common
     [:div {:class "container"}
        [:div {:class "columns"}
@@ -19,7 +33,8 @@
              [:input {:type "submit" :text "Upload" :class "btn btn-primary"}])]
          [:div {:class "column col-4"} ""]
         ]]
-    [:p message]))
+    (display-amounts amounts)))
+
 
 (defn temp-file-path [params]
   (->
@@ -37,7 +52,7 @@
                  :total-cost (api/total-cost rows)
                  :profit (api/net-profit rows)}
        ]
-    (home (str amounts))))
+    (home amounts)))
 
 (defroutes home-routes
   (GET "/" [] (home))

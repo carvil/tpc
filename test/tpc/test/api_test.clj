@@ -19,3 +19,7 @@
     (is (type (Row->TPCEntry row_cr)) TPCEntry)
     (is (:tpc-com (Row->TPCEntry row_cr)) 87)
     (is (:tpc-com (Row->TPCEntry row_normal)) 96)))
+
+(deftest to-money-test
+  (testing "it rounds to 2 decimal places and adds currency"
+    (is (= (to-money 23.456) "£23.46"))))

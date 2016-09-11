@@ -74,18 +74,21 @@
   "Converts a list of Rows into TPCEntry records."
   (map #(Row->TPCEntry %) rows))
 
+(defn to-money [amount]
+  (format "%s%.2f" "£" amount))
+
 (defn tpc-cost [rows]
   "Calculates the aggregate cost for TPC"
-  (reduce + (map #(types/tpc-cost %) (rows->entries rows))))
+  (to-money (reduce + (map #(types/tpc-cost %) (rows->entries rows)))))
 
 (defn booking-cost [rows]
   "Calculates the aggregate cost for booking"
-  (reduce + (map #(types/booking-cost %) (rows->entries rows))))
+  (to-money (reduce + (map #(types/booking-cost %) (rows->entries rows)))))
 
 (defn total-cost [rows]
   "Calculates the aggregate cost"
-  (reduce + (map #(types/total-cost %) (rows->entries rows))))
+  (to-money (reduce + (map #(types/total-cost %) (rows->entries rows)))))
 
 (defn net-profit [rows]
   "Calculates the net profit of this months' data"
-  (reduce + (map #(types/net-profit %) (rows->entries rows))))
+  (to-money (reduce + (map #(types/net-profit %) (rows->entries rows)))))

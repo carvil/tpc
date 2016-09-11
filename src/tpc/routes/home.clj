@@ -13,27 +13,54 @@
   (map amounts-to-list amounts))
 
 
+(defn empty-response []
+  [:section { :class "empty"}
+   [:p {:class "empty-title"} "No file selected"]
+   [:p {:class "empty-meta"} "Upload a TPC bill to see the results"]])
+
+
 (defn display-amounts [amounts]
   (if (empty? amounts)
-    [:p "Upload a bill"]
-    (apply concat (map #(vector [:dt (first %)] [:dd (second %)]) amounts))))
+    (empty-response)
+    (let [list-items (apply concat (map #(vector [:dt (first %)] [:dd (second %)]) amounts))
+          dl [:dl list-items]]
+      [:section { :class "empty"}
+        [:p {:class "empty-title"} "Breakdown of amounts"]
+        [:p {:class "empty-meta"} dl]])))
 
 
-(defn home [& [amounts]]
-  (layout/common
-    [:div {:class "container"}
+(defn form-component []
+  (form-to
+    {:enctype "multipart/form-data"}
+    [:post "/"]
+    (file-upload :file)
+    [:input {:type "submit" :text "Upload" :class "btn btn-primary"}]))
+
+
+(defn form-container []
+  [:div {:class "container"}
        [:div {:class "columns"}
          [:div {:class "column col-4"} ""]
          [:div {:class "column col-4"}
            [:h2 "The Porto Concierge"]
            [:hr]
-           (form-to {:enctype "multipart/form-data"}
-             [:post "/"]
-             (file-upload :file)
-             [:input {:type "submit" :text "Upload" :class "btn btn-primary"}])]
+           (form-component)
+          ]
+         [:div {:class "column col-4"} ""]]])
+
+
+(defn response-container [amounts]
+  [:div {:class "container"}
+       [:div {:class "columns"}
          [:div {:class "column col-4"} ""]
-        ]]
-    (display-amounts amounts)))
+         [:div {:class "column col-4"} (display-amounts amounts)]
+         [:div {:class "column col-4"} ""]]])
+
+
+(defn home [& [amounts]]
+  (layout/common
+    (form-container)
+    (response-container amounts)))
 
 
 (defn temp-file-path [params]
